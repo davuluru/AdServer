@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+		<table>
+			<tr>
+				<td width="100px;">Partner ID:</td>
+				<td><input type="text" name="partner_id" id="partner_id">
+				</td>
+			</tr>
+			<tr>
+				<td width="100px;">Duration :</td>
+				<td><input type="text" name="duration" id="duration">
+				</td>
+			</tr>
+			<tr>
+				<td width="100px;">Ad Content :</td>
+				<td><textarea cols="25" rows="3" name="ad_content"
+						id="ad_content"></textarea></td>
+			</tr>
+			<tr>
+				<td><input type="button" name="save" value="Save"
+					onclick="createAd();" /></td>
+			</tr>
+		</table>
+	</div>
+	<div id="resultsDiv"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+    
+    function createAd(){
+        var adJson ={"duration":$("#duration").val(),
+                "ad_content":$("#ad_content").val(),
+                "partner_id":$("#partner_id").val()};
+        alert(JSON.stringify(adJson));
+        $.ajax({
+            type: "POST",
+            url: "rest/AdServices/createAd",
+            data: adJson,
+            dataType: "json",
+            success: function(data){
+                if(data.StatusMessage == 'Success'){
+                    var tableCreation="<table border='1'><thead><tr><th>Partner ID</th><th>AD Content</th><th>Duration</th></tr></thead>";
+                    var tableBody="<tbody>";
+                    for(var i=0; i<data.AdsResultList.length;i++){
+                        tableBody+="<tr><td>"+data.AdsResultList[i]['partner_id']+"</td>"
+                                +"<td>"+data.AdsResultList[i]['ad_content']+"</td>"
+                                +"<td>"+data.AdsResultList[i]['duration']+"</td></tr>";
+                            }
+                            tableBody+="</tbody></table>";
+                            tableCreation+=tableBody;
+                            $("#resultsDiv").empty();
+                            //alert(tableCreation);
+                            $("#resultsDiv").append(tableCreation);
+                        }else{
+                            alert(data.StatusMessage);
+                        }
+                        
+                        
+                    },
+                    failure: function(errMsg) {
+                        alert("failure:-"+JSON.stringify(errMsg));
+                    },error:function(errMsg){
+                         alert("error:-"+JSON.stringify(errMsg));
+                        
+                    }
+                });
+            }
+        </script>
+</html>

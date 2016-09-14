@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+		<table>
+			<tr>
+				<td width="100px;">Partner ID:</td>
+				<td><input type="text" name="partner_id" id="partner_id">
+				</td>
+			</tr>
+
+			<tr>
+				<td><input type="button" name="save" value="Search"
+					onclick="searchAds();" /></td>
+			</tr>
+		</table>
+	</div>
+	<div id="resultsDiv"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+    
+    function searchAds(){
+        var adJson ={"partner_id":$("#partner_id").val()};
+        alert(JSON.stringify(adJson));
+         $.ajax({
+            type: "GET",
+            url: "rest/AdServices/"+$("#partner_id").val()+"?random="+Math.random(),
+            data: adJson,
+            dataType: "json",
+            success: function(data){
+               if(data.length==0){
+            	   alert("No Data Available for given Partner ID");
+            	   $("#resultsDiv").empty(); 
+               }
+               else{
+            	var tableCreation="<table border='1'><thead><tr><th>Partner ID</th><th>AD Content</th><th>Duration</th></tr></thead>";
+                
+                
+                var tableBody="<tbody>";
+                for(var i=0; i<data.length;i++){
+                    tableBody+="<tr><td>"+data[i]['partner_id']+"</td>"
+                            +"<td>"+data[i]['ad_content']+"</td>"
+                            +"<td>"+data[i]['duration']+"</td></tr>";
+                }
+                tableBody+="</tbody></table>";
+                tableCreation+=tableBody;
+                $("#resultsDiv").empty();               
+                $("#resultsDiv").append(tableCreation);
+               }
+               },
+            
+            failure: function(errMsg) {
+                     alert("failure:-"+JSON.stringify(errMsg));
+            },error:function(errMsg){
+                 alert("error:-"+JSON.stringify(errMsg));
+                
+            }
+        }); 
+    }
+</script>
+</html>
+
+<-- jersy, Rest, Tomcat Server
