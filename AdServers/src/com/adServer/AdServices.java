@@ -19,13 +19,12 @@ import net.sf.json.JSONObject;
 @Path("/AdServices")
 public class AdServices {
    
-	@Context private HttpServletRequest request;
-	
-   @Context private HttpServletResponse response;
-   @POST
-   @Path("/createAd")
-   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-   public Map createAd(@FormParam("ad_content") String ad_content,
+	@Context private HttpServletRequest request;	
+	@Context private HttpServletResponse response;
+	@POST
+	@Path("/createAd")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Map createAd(@FormParam("ad_content") String ad_content,
 		   @FormParam("partner_id") String partner_id, 
 		   @FormParam("duration") int duration){
       
@@ -80,8 +79,7 @@ public class AdServices {
        public List getAds(@PathParam("param") String partner_id){           
            List adsResultList = new ArrayList();
            try{
-               System.out.println("Passed Partner ID id = "+partner_id);
-        	   HttpSession session = request.getSession();
+               HttpSession session = request.getSession();
                List adsList = new ArrayList();
                if(session.getAttribute("AdsList")!=null)
             	   adsList = (List)session.getAttribute("AdsList");
