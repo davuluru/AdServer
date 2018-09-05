@@ -17,9 +17,7 @@ public class AdPojo implements Serializable {
     public void setCurrent_time(long current_time) {
         this.current_time = current_time;
     }
-    public AdPojo(){
-        
-    }
+    
     public int getDuration() {
         return duration;
     }
